@@ -1,9 +1,7 @@
 service CatalogService {
 
     
-    function getWorkzoneID() returns array of {
-
-    };
+    function getWorkzoneID() returns String;
     
 
     

@@ -8,6 +8,7 @@ module.exports = cds.service.impl(async function () {
         
         try{
 
+            
             // Basic destination retrieval 
             const destination = await getDestination({ destinationName: 'Piwik' });
     

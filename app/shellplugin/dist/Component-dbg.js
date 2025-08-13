@@ -23,9 +23,12 @@ sap.ui.define(["sap/ui/core/UIComponent"], function (BaseComponent) {
       _paq.push(['setDocumentTitle', document.title]);
       _paq.push(['setCustomUrl', document.URL]);
       _paq.push(['trackPageView']);
-      const url = sap.ui.require.toUrl("be/nmbs/plugins/wzanalyticsplugin") + "/Piwik/";
+
+      //fetch de workzone id from cap
+      const piwikid = await this.fetchWorkzoneID();
+      const url = sap.ui.require.toUrl("be/nmbs/plugins/shellplugin") + "/Piwik/";
       _paq.push(['setTrackerUrl', url + 'piwik.php']);
-      _paq.push(['setSiteId', '35']);
+      _paq.push(['setSiteId', piwikid]);
       var d = document,
         g = d.createElement('script'),
         s = d.getElementsByTagName('script')[0];
@@ -33,11 +36,7 @@ sap.ui.define(["sap/ui/core/UIComponent"], function (BaseComponent) {
       g.async = true;
       g.defer = true;
       g.src = url + "piwik.js";
-
-      //fetch de workzone id from cap
-      const piwikid = await this.fetchWorkzoneID();
       console.log(piwikid);
-      console.warn("door de funtie");
 
       //@ts-ignore
       s.parentNode.insertBefore(g, s);
@@ -55,7 +54,7 @@ sap.ui.define(["sap/ui/core/UIComponent"], function (BaseComponent) {
         _paq.push(['trackContentImpressionsWithinNode', document]);
         _paq.push(['enableLinkTracking']);
         //@ts-ignore
-        piwik_log(this.getHash(), piwikid[0], url + 'piwik.php');
+        piwik_log(this.getHash(), piwikid, url + 'piwik.php');
       }, false);
     },
     /**
@@ -77,7 +76,7 @@ sap.ui.define(["sap/ui/core/UIComponent"], function (BaseComponent) {
         const oContext = oBinding?.getBoundContext();
         if (!oContext) {
           console.warn("No context returned from getWorkzoneID");
-          return;
+          return "";
         }
         const data = oContext.getObject();
         if (data && data.value) {
@@ -86,9 +85,11 @@ sap.ui.define(["sap/ui/core/UIComponent"], function (BaseComponent) {
           // use data.value here as needed
         } else {
           console.warn("No data.value found in context");
+          return "";
         }
       } catch (error) {
         console.error("Error fetching Workzone ID", error);
+        return "";
       }
     }
   });

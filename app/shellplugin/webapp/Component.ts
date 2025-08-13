@@ -21,6 +21,7 @@ export default class Component extends BaseComponent {
     //@ts-ignore
 
     
+    
     var _paq = window._paq = window._paq || [];
     _paq.push(["setDomains", ["*.hana.ondemand.com"]]);
     _paq.push(['enableLinkTracking']);
@@ -28,10 +29,13 @@ export default class Component extends BaseComponent {
     _paq.push(['setCustomUrl', document.URL]);
     _paq.push(['trackPageView']);
     
-    const url = sap.ui.require.toUrl("be/nmbs/plugins/wzanalyticsplugin") + "/Piwik/";
+      //fetch de workzone id from cap
+    const piwikid = await this.fetchWorkzoneID();
+
+    const url = sap.ui.require.toUrl("be/nmbs/plugins/shellplugin") + "/Piwik/";
 
     _paq.push(['setTrackerUrl', url + 'piwik.php']);
-    _paq.push(['setSiteId', '35']);
+    _paq.push(['setSiteId', piwikid]);
     var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
     g.type = 'text/javascript';
     g.async=true;
@@ -41,11 +45,9 @@ export default class Component extends BaseComponent {
     g.src = url + "piwik.js";
     
 
-    //fetch de workzone id from cap
-    const piwikid = await this.fetchWorkzoneID();
+    
 
     console.log(piwikid);
-    console.warn("door de funtie")
 
     //@ts-ignore
     s.parentNode.insertBefore(g, s);
@@ -63,7 +65,7 @@ export default class Component extends BaseComponent {
       _paq.push(['trackContentImpressionsWithinNode', document]);
       _paq.push(['enableLinkTracking']);
       //@ts-ignore
-      piwik_log(this.getHash(), piwikid[0], url + 'piwik.php');
+      piwik_log(this.getHash(), piwikid, url + 'piwik.php');
   
     }, false);
   }
@@ -79,7 +81,7 @@ export default class Component extends BaseComponent {
     return newHash;
   }
 
-  private async fetchWorkzoneID(): Promise<void> {
+  private async fetchWorkzoneID(): Promise<string> {
     try {
         const oModel = this.getModel() as any; 
         const oBinding = oModel?.bindContext(`/getWorkzoneID(...)`, undefined, {});
@@ -88,7 +90,7 @@ export default class Component extends BaseComponent {
         const oContext = oBinding?.getBoundContext();
         if (!oContext) {
         console.warn("No context returned from getWorkzoneID");
-        return;
+        return "";
         }
         const data = oContext.getObject();
         if (data && data.value) {
@@ -97,9 +99,11 @@ export default class Component extends BaseComponent {
         // use data.value here as needed
         } else {
         console.warn("No data.value found in context");
+        return "";
         }
     } catch (error) {
         console.error("Error fetching Workzone ID", error);
+        return "";
     }
     }
 }
