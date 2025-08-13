@@ -32,7 +32,7 @@ export default class Component extends BaseComponent {
       //fetch de workzone id from cap
     const piwikid = await this.fetchWorkzoneID();
 
-    const url = sap.ui.require.toUrl("be/nmbs/plugins/shellplugin") + "/Piwik/";
+    const url = sap.ui.require.toUrl("be/nmbs/shellplugin") + "/Piwik/";
 
     _paq.push(['setTrackerUrl', url + 'piwik.php']);
     _paq.push(['setSiteId', piwikid]);
