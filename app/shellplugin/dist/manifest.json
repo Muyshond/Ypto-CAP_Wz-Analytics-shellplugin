@@ -114,7 +114,13 @@
       "async": true
     }
   }, 
+  
   "sap.flp": {
     "type": "plugin"
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "benmbsshellplugin"
   }
+
 }

@@ -1,6 +1,14 @@
 {
+  "xsappname": "workzone-analytics-plugin-${org}-${space}",
+  "tenant-mode": "dedicated",
   "scopes": [],
   "attributes": [],
-  "role-templates": [],
+  "role-templates": [
+    {
+      "name": "Viewer",
+      "description": "Minimal role for accessing the service",
+      "scope-references": []
+    }
+  ],
   "authorities-inheritance": false
 }
